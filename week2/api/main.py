@@ -1,5 +1,9 @@
 from fastapi import FastAPI
 from routers import memos
+from database import engine
+from models import MemoModel
+
+MemoModel.metadata.create_all(bind=engine)
 
 api = FastAPI(
     title="ONBOARD-WEEK2",
