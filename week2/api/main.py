@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from routers import memos
 
 api = FastAPI(
     title="ONBOARD-WEEK2",
@@ -16,6 +17,8 @@ api = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
 )
+
+api.include_router(memos.router, prefix="/memos", tags=["WEEK2"])
 
 @api.get("/", summary="서버의 상태를 반환합니다.", tags=["WEEK2"])
 async def root():
