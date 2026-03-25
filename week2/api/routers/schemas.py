@@ -15,3 +15,4 @@ class MemoResponse(BaseModel):
     body: str | None
     created_at: datetime
     updated_at: datetime
+    model_config = {"from_attributes": True}
