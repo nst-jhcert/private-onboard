@@ -1,0 +1,12 @@
+# Web Framework
+fastapi==0.115.6
+pydantic==2.10.4
+uvicorn[standard]==0.34.0
+
+# PostgreSQL
+sqlalchemy==2.0.35
+psycopg2-binary==2.9.9
+alembic==1.13.3
+
+# Redis
+redis==5.1.0
