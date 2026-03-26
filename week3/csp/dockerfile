@@ -36,6 +36,7 @@ RUN wget -O waf https://waf.io/waf-2.0.27 \
 
 ENV PATH="/app:$PATH"
 
+COPY parser ./parser
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
