@@ -1,0 +1,66 @@
+"""CSP packet parse/serialize endpoints."""
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel, Field
+
+from models import csp as csp_model
+
+router = APIRouter()
+
+
+class ParseRequest(BaseModel):
+    """Request body for parsing a raw CSP header."""
+
+    raw: str = Field(
+        description="32-bit CSP header as hex string (e.g. 'A5143403') or decimal integer string",
+        json_schema_extra={"examples": ["A5143403"]},
+    )
+
+
+class ParseResponse(BaseModel):
+    """Parsed CSP header fields with raw representations."""
+
+    header: csp_model.CspHeader
+    raw_hex: str
+    raw_int: int
+
+
+class SerializeResponse(BaseModel):
+    """Serialized CSP header raw representations."""
+
+    raw_hex: str
+    raw_int: int
+    raw_bytes: list[int]
+
+
+@router.post("/parse", response_model=ParseResponse)
+def parse_csp_header(request: ParseRequest):
+    """Parse a raw 32-bit value into CSP header fields."""
+    try:
+        raw = int(request.raw, 16) if request.raw.startswith(("0x", "0X")) or all(
+            c in "0123456789abcdefABCDEF" for c in request.raw
+        ) else int(request.raw)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid raw value")
+
+    if raw < 0 or raw > 0xFFFFFFFF:
+        raise HTTPException(status_code=400, detail="Value must be 0..0xFFFFFFFF")
+
+    header = csp_model.parse(raw)
+    return ParseResponse(
+        header=header,
+        raw_hex=f"{raw:08X}",
+        raw_int=raw,
+    )
+
+
+@router.post("/serialize", response_model=SerializeResponse)
+def serialize_csp_header(header: csp_model.CspHeader):
+    """Serialize CSP header fields into a raw 32-bit value."""
+    raw = csp_model.serialize(header)
+    raw_bytes = list(raw.to_bytes(4, byteorder="big"))
+    return SerializeResponse(
+        raw_hex=f"{raw:08X}",
+        raw_int=raw,
+        raw_bytes=raw_bytes,
+    )

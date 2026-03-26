@@ -2,11 +2,15 @@
 
 from fastapi import FastAPI
 
+from routers import csp
+
 api = FastAPI(
     title="ONBOARD-WEEK4",
     docs_url="/docs",
     redoc_url="/redoc",
 )
+
+api.include_router(csp.router, prefix="/csp", tags=["CSP"])
 
 
 @api.get("/")
