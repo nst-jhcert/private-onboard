@@ -11,6 +11,7 @@ interface BuildResult {
 }
 
 const FIELDS = [
+  { name: "version", label: "Version", min: 0, max: 7 },
   { name: "type", label: "Type (0=TM, 1=TC)", min: 0, max: 1 },
   { name: "sec_hdr_flag", label: "Sec Hdr Flag", min: 0, max: 1 },
   { name: "apid", label: "APID", min: 0, max: 2047 },

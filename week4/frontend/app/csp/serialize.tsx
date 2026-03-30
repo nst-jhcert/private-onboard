@@ -11,6 +11,7 @@ interface BuildResult {
 }
 
 const FIELDS = [
+  { name: "version", label: "Version", min: 0, max: 7 },
   { name: "priority", label: "Priority", min: 0, max: 3 },
   { name: "source", label: "Source", min: 0, max: 31 },
   { name: "destination", label: "Destination", min: 0, max: 31 },
@@ -23,6 +24,7 @@ type FieldName = (typeof FIELDS)[number]["name"];
 
 export default function CspSerialize() {
   const [fields, setFields] = useState<Record<FieldName, number>>({
+    version: 0,
     priority: 0,
     source: 0,
     destination: 0,
