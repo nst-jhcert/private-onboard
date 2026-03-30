@@ -2,7 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const WS_URL = process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:8080/ws";
+const WS_URL =
+  process.env.NEXT_PUBLIC_WS_URL ||
+  (typeof window !== "undefined"
+    ? `ws://${window.location.host}/ws`
+    : "ws://localhost/ws");
 const MAX_MESSAGES = 100;
 
 interface MqMessage {
